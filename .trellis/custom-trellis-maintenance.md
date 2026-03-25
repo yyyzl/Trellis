@@ -33,14 +33,9 @@
 
 ## 2. 当前这份自定义 Trellis 具体多了什么
 
-当前你已经额外加入了 4 个“计划优先”能力：
+当前你已经额外加入了 6 个 Fusion 能力：
 
-- `brainstorm-plus`
-- `write-task-plan`
-- `execute-plan-tdd`
-- `harvest-learnings`
-
-它们的职责可以概括为：
+**四件套（计划优先链路）：**
 
 - `brainstorm-plus`
   更强的需求收敛与设计确认，产出 `prd.md + info.md`
@@ -54,7 +49,20 @@
 - `harvest-learnings`
   从 task 中提炼长期有效经验，沉淀回 `.trellis/spec/`
 
-建议把这 4 个能力视为你当前发行版的核心增量能力。
+**辅助能力：**
+
+- `systematic-debugging`
+  四阶段系统化调试（根本原因 → 模式分析 → 假设测试 → TDD 修复），3 次失败升级为架构讨论
+
+- `review-with-agents`
+  两阶段子代理交叉审查（规范审查 + 质量审查），用于高风险复杂任务
+
+**安装工具：**
+
+- `install-fusion.sh`
+  一键安装脚本，可把以上 6 个 skill 安装到任何已初始化的 Trellis 项目
+
+建议把这 6 个能力视为你当前发行版的核心增量能力。
 
 ---
 

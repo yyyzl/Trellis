@@ -48,14 +48,40 @@
 | Files | `.agents/skills/harvest-learnings/SKILL.md`, `.claude/commands/fusion/harvest-learnings.md` |
 | Upstream replacement candidate | If upstream adds spec promotion workflow |
 
+### systematic-debugging
+
+| Field | Value |
+|-------|-------|
+| Introduced | 2026-03-26 |
+| Purpose | Four-phase debugging methodology (root cause → pattern → hypothesis → TDD fix) with 3-failure architectural escalation |
+| Why not upstream | Upstream `break-loop` only handles AI loops, not systematic bug investigation |
+| Files | `.agents/skills/systematic-debugging/SKILL.md`, `.claude/commands/fusion/systematic-debugging.md` |
+| Upstream replacement candidate | If upstream adds structured debugging methodology |
+
+### review-with-agents
+
+| Field | Value |
+|-------|-------|
+| Introduced | 2026-03-26 |
+| Purpose | Two-stage subagent cross-review (spec compliance + code quality) for catching single-agent blind spots |
+| Why not upstream | No upstream equivalent for multi-agent cross-review |
+| Files | `.agents/skills/review-with-agents/SKILL.md`, `.claude/commands/fusion/review-with-agents.md` |
+| Upstream replacement candidate | If upstream adds subagent-based code review |
+
 ---
 
 ## Structural Decisions
 
+### Overlay installer (2026-03-26)
+
+- `install-fusion.sh` copies all 6 Fusion skills, commands, and docs into any Trellis project
+- No need to fork — install into any existing `trellis init` project
+- Warns about config.yaml `update.skip` entries needed
+
 ### Namespace isolation (2026-03-26)
 
 - Custom Claude Code commands live under `.claude/commands/fusion/` (invoked as `/fusion:*`)
-- Custom skills live under `.agents/skills/<skill-name>/` with unique names
+- Custom skills live under `.agents/skills/<skill-name>/` with unique names (6 total)
 - Native Trellis commands remain under `/trellis:*` and are not modified
 - `config.yaml` `update.skip` only targets custom paths, not entire native directories
 

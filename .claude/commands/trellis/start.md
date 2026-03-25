@@ -355,6 +355,8 @@ If yes, resume from the appropriate step (usually Step 7 or 8).
 | `/fusion:write-task-plan` | Generate TDD-first execution plan from PRD and design |
 | `/fusion:execute-plan-tdd` | Execute `plan.md` slice by slice with strict TDD |
 | `/fusion:harvest-learnings` | Promote durable task lessons into `.trellis/spec/` |
+| `/fusion:systematic-debugging` | Four-phase root-cause debugging methodology |
+| `/fusion:review-with-agents` | Two-stage subagent cross-review (spec + quality) |
 | `/trellis:parallel` | Complex tasks needing isolated worktree |
 | `/trellis:finish-work` | Before committing changes |
 | `/trellis:record-session` | After completing a task |

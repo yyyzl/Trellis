@@ -55,6 +55,8 @@ update:
     - .agents/skills/write-task-plan/
     - .agents/skills/execute-plan-tdd/
     - .agents/skills/harvest-learnings/
+    - .agents/skills/systematic-debugging/
+    - .agents/skills/review-with-agents/
     # Cursor customizations
     - .cursor/
 

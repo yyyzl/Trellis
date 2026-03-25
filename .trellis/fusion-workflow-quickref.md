@@ -253,7 +253,35 @@ hook 自动开场
 
 ---
 
-## 5. 最短决策规则
+## 5. 辅助能力速查
+
+### 遇到 bug 时
+
+```text
+/fusion:systematic-debugging
+```
+
+四阶段：根本原因 → 模式分析 → 假设测试 → TDD 修复。
+3 次修不好 → 停下来讨论架构。
+
+### 高风险任务想加审查时
+
+```text
+execute-plan-tdd 完成后 → /fusion:review-with-agents → harvest-learnings
+```
+
+调度两个独立子代理：规范审查 + 质量审查。
+不通过 → 修 → 重审。可选，简单任务不需要。
+
+### 安装 Fusion 到其他项目
+
+```bash
+./install-fusion.sh /path/to/target/project
+```
+
+---
+
+## 6. 最短决策规则
 
 如果你只记一句：
 
@@ -273,7 +301,7 @@ hook 自动开场
 
 ---
 
-## 6. 相关文档
+## 7. 相关文档
 
 - [融合工作流完整说明](./fusion-workflow.md)
 - [README 中文版](../README_CN.md)

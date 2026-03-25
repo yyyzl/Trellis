@@ -13,12 +13,19 @@
 
 ## 1. 这份文档解决什么问题
 
-这份文档说明当前仓库在原始 Trellis 工作流之外，新增的 4 个“计划优先”能力应该怎么用：
+这份文档说明当前仓库在原始 Trellis 工作流之外，新增的 6 个 Fusion 能力应该怎么用：
+
+**四件套（计划优先链路）：**
 
 - `brainstorm-plus`
 - `write-task-plan`
 - `execute-plan-tdd`
 - `harvest-learnings`
+
+**辅助能力：**
+
+- `systematic-debugging` — 四阶段系统化调试
+- `review-with-agents` — 子代理交叉审查
 
 它主要回答两个问题：
 
@@ -338,6 +345,44 @@ $start
 
 ---
 
+### 4.5 `systematic-debugging`
+
+作用：
+
+- 四阶段系统化调试：根本原因调查 → 模式分析 → 假设测试 → TDD 修复
+- 3 次修复失败自动升级为架构问题讨论
+
+适合场景：
+
+- 遇到任何 bug、测试失败、意外行为
+- 尤其是已经尝试过一次修复但没成功时
+- 时间紧迫时（系统化比乱试更快）
+
+不适合场景：
+
+- AI 陷入重复循环 → 用 `break-loop`
+
+---
+
+### 4.6 `review-with-agents`
+
+作用：
+
+- 调度独立子代理对实现进行两阶段交叉审查
+- 第一阶段：规范审查（代码是否符合 PRD）
+- 第二阶段：质量审查（代码是否写得好）
+- 审查不通过 → 修复 → 重审循环
+
+适合场景：
+
+- 复杂任务（3+ 文件改动、跨层、新架构）
+- 高风险变更（认证、支付、数据迁移）
+- 你对实现质量不够放心
+
+可选：简单任务不需要，`check` + `finish-work` 已经够用。
+
+---
+
 ## 5. 推荐的分层理解
 
 为了避免工作流冲突，建议你一直用下面这套分层理解：
@@ -385,6 +430,18 @@ $start
 
 ```text
 start → brainstorm-plus → write-task-plan → execute-plan-tdd → harvest-learnings
+```
+
+如果是高风险任务（认证、支付、数据迁移），在 execute-plan-tdd 之后加一步：
+
+```text
+execute-plan-tdd → review-with-agents → harvest-learnings
+```
+
+如果实现过程中遇到 bug：
+
+```text
+→ systematic-debugging → 修复后继续 execute-plan-tdd
 ```
 
 ---
@@ -446,6 +503,8 @@ start
 | 生成任务计划 | `$write-task-plan` | `/fusion:write-task-plan` |
 | 按 TDD 执行计划 | `$execute-plan-tdd` | `/fusion:execute-plan-tdd` |
 | 收割经验沉淀到 spec | `$harvest-learnings` | `/fusion:harvest-learnings` |
+| 系统化调试 | `$systematic-debugging` | `/fusion:systematic-debugging` |
+| 子代理交叉审查 | `$review-with-agents` | `/fusion:review-with-agents` |
 
 ### 7.2 仍然保留的原生命令
 
