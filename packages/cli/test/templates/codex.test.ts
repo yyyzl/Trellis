@@ -9,17 +9,21 @@ import {
 const EXPECTED_SKILL_NAMES = [
   "before-dev",
   "brainstorm",
+  "brainstorm-plus",
   "break-loop",
   "check",
   "check-cross-layer",
   "create-command",
+  "execute-plan-tdd",
   "finish-work",
+  "harvest-learnings",
   "improve-ut",
   "integrate-skill",
   "onboard",
   "record-session",
   "start",
   "update-spec",
+  "write-task-plan",
 ];
 
 const EXPECTED_AGENT_NAMES = [

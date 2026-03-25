@@ -60,17 +60,21 @@ describe("settingsTemplate SessionStart matchers", () => {
 const EXPECTED_COMMAND_NAMES = [
   "before-dev",
   "brainstorm",
+  "brainstorm-plus",
   "break-loop",
   "check-cross-layer",
   "check",
   "create-command",
+  "execute-plan-tdd",
   "finish-work",
+  "harvest-learnings",
   "integrate-skill",
   "onboard",
   "parallel",
   "record-session",
   "start",
   "update-spec",
+  "write-task-plan",
 ];
 
 describe("getAllCommands", () => {

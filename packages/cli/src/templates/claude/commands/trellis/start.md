@@ -135,6 +135,8 @@ See `/trellis:brainstorm` for the full process. Summary:
 5. **Confirm final requirements** - Get explicit approval
 6. **Proceed to Task Workflow** - With clear requirements in PRD
 
+If the user wants a deeper design review with explicit `info.md` confirmation and a cleaner handoff to planning, prefer `/fusion:brainstorm-plus` instead of `/trellis:brainstorm`.
+
 > **Subtask Decomposition**: If brainstorm reveals multiple independent work items,
 > consider creating subtasks using `--parent` flag or `add-subtask` command.
 > See `/trellis:brainstorm` Step 8 for details.
@@ -358,6 +360,10 @@ If yes, resume from the appropriate step (usually Step 7 or 8).
 |---------|-------------|
 | `/trellis:start` | Begin a session (this command) |
 | `/trellis:brainstorm` | Clarify vague requirements (called from start) |
+| `/fusion:brainstorm-plus` | Deeper design exploration with explicit `info.md` output |
+| `/fusion:write-task-plan` | Generate TDD-first execution plan from PRD and design |
+| `/fusion:execute-plan-tdd` | Execute `plan.md` slice by slice with strict TDD |
+| `/fusion:harvest-learnings` | Promote durable task lessons into `.trellis/spec/` |
 | `/trellis:parallel` | Complex tasks needing isolated worktree |
 | `/trellis:finish-work` | Before committing changes |
 | `/trellis:record-session` | After completing a task |

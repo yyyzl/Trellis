@@ -129,6 +129,8 @@ See `$brainstorm` for the full process. Summary:
 5. **Confirm final requirements** - Get explicit approval
 6. **Proceed to Task Workflow** - With clear requirements in PRD
 
+If the user wants a deeper design review with explicit `info.md` confirmation and a cleaner handoff to planning, prefer `$brainstorm-plus` instead of `$brainstorm`.
+
 ---
 
 ## Task Workflow (Development Tasks)
@@ -317,6 +319,9 @@ If yes, resume from the appropriate step (usually Step 7 or 8).
 | Skill | When to Use |
 |---------|-------------|
 | `$start` | Begin a session (this skill) |
+| `$brainstorm-plus` | Deeper design exploration with explicit `info.md` output |
+| `$execute-plan-tdd` | Execute `plan.md` slice by slice with strict TDD |
+| `$harvest-learnings` | Promote durable task lessons into `.trellis/spec/` |
 | `$finish-work` | Before committing changes |
 | `$record-session` | After completing a task |
 

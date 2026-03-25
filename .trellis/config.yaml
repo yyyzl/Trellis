@@ -48,8 +48,14 @@ default_package: cli
 #
 update:
   skip:
-    - .claude/commands/
-    - .agents/skills/
+    # Fusion custom commands (independent namespace, never overwritten by trellis update)
+    - .claude/commands/fusion/
+    # Fusion custom skills (uniquely named, no conflict with native skills)
+    - .agents/skills/brainstorm-plus/
+    - .agents/skills/write-task-plan/
+    - .agents/skills/execute-plan-tdd/
+    - .agents/skills/harvest-learnings/
+    # Cursor customizations
     - .cursor/
 
 #-------------------------------------------------------------------------------
