@@ -137,6 +137,22 @@ Stop and ask for help when:
 - a required dependency or environment assumption is missing
 - the next slice requires changing the agreed architecture
 
+### Checkpoint — Context Continuity
+
+After completing each slice, **update `.fusion/` state** to persist progress:
+
+```bash
+python3 .trellis/scripts/fusion/checkpoint.py \
+  --slice <completed-slice> \
+  --status "<slice>.green complete" \
+  --files "<files touched in this slice>" \
+  --source "execute-plan-tdd" \
+  --next "<next slice or action>"
+```
+
+This ensures progress survives session boundaries, compact, and platform switches.
+Also run checkpoint proactively when context usage approaches ~60%.
+
 ### 6. Final wrap-up
 
 After all slices are complete:
@@ -145,10 +161,11 @@ After all slices are complete:
 2. summarize what was implemented
 3. list the tests and checks run
 4. note any remaining risks
-5. recommend `$harvest-learnings`
-5. after that, recommend `$check`
-6. after that, recommend `$finish-work`
-7. after human testing and commit, recommend `$record-session`
+5. run a final `/fusion:checkpoint` to persist completion state
+6. recommend `$harvest-learnings`
+7. after that, recommend `$check`
+8. after that, recommend `$finish-work`
+9. after human testing and commit, recommend `$record-session`
 
 ### Red Flags — STOP and Start Over
 

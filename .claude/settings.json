@@ -1,4 +1,31 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "MultiEdit",
+      "Grep",
+      "Glob",
+      "LS",
+      "WebFetch",
+      "WebSearch",
+      "NotebookRead",
+      "NotebookEdit",
+      "TodoRead",
+      "TodoWrite",
+      "mcp__sequential-thinking__*",
+      "mcp__context7__*",
+      "mcp__chrome-devtools__*",
+      "mcp__ace-tool__*",
+      "mcp__acemcp__*",
+      "mcp__contextweaver__*"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "defaultMode": "bypassPermissions",
   "hooks": {
     "SessionStart": [
       {
@@ -8,6 +35,11 @@
             "type": "command",
             "command": "python3 .claude/hooks/session-start.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/fusion-session-start.py",
+            "timeout": 5
           }
         ]
       },
@@ -18,6 +50,11 @@
             "type": "command",
             "command": "python3 .claude/hooks/session-start.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/fusion-session-start.py",
+            "timeout": 5
           }
         ]
       },
@@ -28,6 +65,23 @@
             "type": "command",
             "command": "python3 .claude/hooks/session-start.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/fusion-session-start.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/fusion-pre-compact.py",
+            "timeout": 3
           }
         ]
       }

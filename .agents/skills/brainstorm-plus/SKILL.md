@@ -126,7 +126,19 @@ Before finishing, ensure:
 - out-of-scope is explicit
 - unresolved questions are either answered or deliberately deferred
 
-### 8. Handoff to planning
+### 8. Checkpoint — Context Continuity
+
+After the design is confirmed, **save key decisions to `.fusion/`** so they survive session boundaries:
+
+```bash
+python3 .trellis/scripts/fusion/checkpoint.py \
+  --status "brainstorm complete, design confirmed" \
+  --source "brainstorm-plus" \
+  --decision "chosen approach::rationale" \
+  --next "run write-task-plan"
+```
+
+### 9. Handoff to planning
 
 Finish with a concise summary and recommend the next step:
 

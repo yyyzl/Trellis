@@ -208,6 +208,20 @@ If you catch yourself thinking:
 - **`$execute-plan-tdd`**: Phase 4 follows the same TDD Iron Law. Write failing test before fix.
 - **`$harvest-learnings`**: After fixing a subtle bug, run harvest-learnings to promote the lesson into spec.
 
+## Checkpoint — Context Continuity
+
+After identifying root cause (Phase 1-2 complete), **save diagnostic findings to `.fusion/`**:
+
+```bash
+python3 .trellis/scripts/fusion/checkpoint.py \
+  --status "root cause identified" \
+  --source "systematic-debugging" \
+  --decision "root cause: <description>::<evidence>" \
+  --next "implement fix with TDD"
+```
+
+This preserves diagnostic conclusions across session boundaries, preventing repeated investigation.
+
 ## Completion Message
 
 Use a closing message shaped like this:
@@ -221,7 +235,8 @@ Test: <test that proves it>
 Phases traversed: <1-4, how many hypothesis cycles>
 
 Next steps:
-1. Run $harvest-learnings (if the bug revealed a reusable lesson)
-2. Run $check
-3. Run $finish-work
+1. Run /fusion:checkpoint to persist debugging conclusions
+2. Run $harvest-learnings (if the bug revealed a reusable lesson)
+3. Run $check
+4. Run $finish-work
 ```

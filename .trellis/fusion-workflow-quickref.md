@@ -132,6 +132,7 @@ Codex hook **不会**自动替你跑：
 当前 Claude Code 已配置：
 
 - `SessionStart`
+- `PreCompact`
 - `PreToolUse`
 - `SubagentStop`
 
@@ -143,12 +144,18 @@ Codex hook **不会**自动替你跑：
 - 注入 `.trellis/workflow.md`
 - 注入 `.trellis/spec/` index
 - 注入 `/trellis:start` 的说明
+- **注入 `.fusion/` 恢复数据**（handoff 摘要 + recovery 进度 + contract）
 
 等价理解：
 
 ```text
-新开 Claude 会话时，hook ≈ 隐式执行了 /trellis:start 的开场部分
+新开 Claude 会话时，hook ≈ 隐式执行了 /trellis:start 的开场部分 + context-continuity 恢复
 ```
+
+#### PreCompact 自动做的事
+
+- Compact 完成后注入 `<fusion-post-compact-guide>` 提醒
+- 提醒 agent 读取/更新 `.fusion/recovery.json` 和 `handoff.md`
 
 #### PreToolUse 自动做的事
 
@@ -272,6 +279,18 @@ execute-plan-tdd 完成后 → /fusion:review-with-agents → harvest-learnings
 
 调度两个独立子代理：规范审查 + 质量审查。
 不通过 → 修 → 重审。可选，简单任务不需要。
+
+### 手动保存/恢复执行状态
+
+```text
+保存：/fusion:checkpoint
+恢复：/fusion:resume-context
+```
+
+- checkpoint 保存当前 slice 进度、工作文件、决策、阻塞到 `.fusion/`
+- resume-context 读取 `.fusion/` 恢复数据并输出恢复摘要
+- 新会话时 SessionStart hook 会自动注入 `.fusion/` 摘要，通常不需要手动 resume
+- 建议在上下文接近 60% 时主动 checkpoint
 
 ### 安装 Fusion 到其他项目
 

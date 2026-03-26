@@ -127,7 +127,18 @@ When editing:
 
 If you add a new section or a new file, update the corresponding `index.md`.
 
-### 7. Report what was harvested
+### 7. Checkpoint — Context Continuity
+
+After learnings are promoted, **save the harvest results to `.fusion/`** so the task state reflects the completed knowledge transfer:
+
+```bash
+python3 .trellis/scripts/fusion/checkpoint.py \
+  --status "harvest complete, specs updated" \
+  --source "harvest-learnings" \
+  --next "run check and finish-work"
+```
+
+### 8. Report what was harvested
 
 Summarize:
 

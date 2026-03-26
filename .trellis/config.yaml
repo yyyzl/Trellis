@@ -59,6 +59,13 @@ update:
     - .agents/skills/review-with-agents/
     # Cursor customizations
     - .cursor/
+    # === Fusion Context Continuity ===
+    - .claude/hooks/fusion-session-start.py
+    - .claude/hooks/fusion-pre-compact.py
+    - .claude/commands/fusion/checkpoint.md
+    - .claude/commands/fusion/resume-context.md
+    - .agents/skills/context-continuity/
+    - .trellis/scripts/fusion/
 
 #-------------------------------------------------------------------------------
 # Task Lifecycle Hooks

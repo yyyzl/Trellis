@@ -13,7 +13,7 @@
 
 ## 1. 这份文档解决什么问题
 
-这份文档说明当前仓库在原始 Trellis 工作流之外，新增的 6 个 Fusion 能力应该怎么用：
+这份文档说明当前仓库在原始 Trellis 工作流之外，新增的 7 个 Fusion 能力应该怎么用：
 
 **四件套（计划优先链路）：**
 
@@ -26,6 +26,7 @@
 
 - `systematic-debugging` — 四阶段系统化调试
 - `review-with-agents` — 子代理交叉审查
+- `context-continuity` — 上下文恢复与执行态持久化
 
 它主要回答两个问题：
 
@@ -77,8 +78,8 @@ $start
 
 当前仓库里的 Codex hook 配置只接了 **`SessionStart`**：
 
-- [`.codex/hooks.json`](/G:/工作流之间合并调研/Trellis/.codex/hooks.json)
-- [`.codex/hooks/session-start.py`](/G:/工作流之间合并调研/Trellis/.codex/hooks/session-start.py)
+- [`.codex/hooks.json`](../.codex/hooks.json)
+- [`.codex/hooks/session-start.py`](../.codex/hooks/session-start.py)
 
 这意味着：
 
@@ -383,6 +384,37 @@ $start
 
 ---
 
+### 4.7 `context-continuity`
+
+作用：
+
+- 在任务目录下维护 `.fusion/` 执行态文件
+- 新会话时自动注入恢复摘要（SessionStart hook）
+- Compact 后提醒 agent 检查/更新状态（PreCompact hook）
+- 提供手动 checkpoint / resume 命令
+
+落地文件：
+
+- `.trellis/tasks/<task>/.fusion/recovery.json` — 机器可读的执行态
+- `.trellis/tasks/<task>/.fusion/handoff.md` — 人/AI 可读的交接摘要
+- `.trellis/tasks/<task>/.fusion/events.jsonl` — 审计事件流
+- `.trellis/tasks/<task>/.fusion/contract.md` — Sprint Contract（可选）
+
+命令：
+
+| 作用 | Codex | Claude Code |
+| --- | --- | --- |
+| 保存执行状态 | 手动调 `checkpoint.py` | `/fusion:checkpoint` |
+| 语义恢复 | 手动调 `resume.py` | `/fusion:resume-context` |
+
+适合场景：
+
+- 复杂任务，会话可能中断
+- 跨平台协作（Claude Code ↔ Codex）
+- 任务时间跨度较长
+
+---
+
 ## 5. 推荐的分层理解
 
 为了避免工作流冲突，建议你一直用下面这套分层理解：
@@ -505,6 +537,8 @@ start
 | 收割经验沉淀到 spec | `$harvest-learnings` | `/fusion:harvest-learnings` |
 | 系统化调试 | `$systematic-debugging` | `/fusion:systematic-debugging` |
 | 子代理交叉审查 | `$review-with-agents` | `/fusion:review-with-agents` |
+| 保存执行状态 | `python3 .trellis/scripts/fusion/checkpoint.py` | `/fusion:checkpoint` |
+| 语义恢复 | `python3 .trellis/scripts/fusion/resume.py` | `/fusion:resume-context` |
 
 ### 7.2 仍然保留的原生命令
 
@@ -636,6 +670,36 @@ Trellis 的 task 目录天然支持跨会话恢复。你只需要看当前 task 
 - `start` 会自动恢复当前 task 上下文
 - `execute-plan-tdd` 会读 `plan.md` 并识别哪些切片已经完成
 - 已完成的切片不需要重做
+
+**增强恢复**：启用 `context-continuity` 后，`.fusion/` 目录会保存更精确的执行态（当前 slice、工作文件、技术决策、阻塞点），新会话时自动注入恢复摘要。详见 [4.7 context-continuity](#47-context-continuity)。
+
+---
+
+### 8.7 什么是 context-continuity？什么时候用？
+
+`context-continuity` 是第 7 个 Fusion 能力，解决的问题是：
+
+> 会话断开后，agent 知道"该做什么"（有 prd/plan），但不知道"做到了哪一步"。
+
+**三级恢复模型**：
+
+| 级别 | 名称 | 来源 | 恢复率 |
+|------|------|------|--------|
+| Level 1 | Exact Resume | provider 原生会话恢复 | ~100% |
+| Level 2 | Semantic Resume | `.fusion/recovery.json` + `handoff.md` | ~85% |
+| Level 3 | Cold Resume | `prd.md` + `plan.md` + `info.md` | ~50% |
+
+Level 1 和 Level 3 已有。**Level 2 就是 context-continuity 提供的**。
+
+**使用场景**：
+- 新会话开始时，SessionStart hook 自动注入 `.fusion/` 恢复摘要
+- Compact 后，PreCompact hook 提醒 agent 检查/更新 `.fusion/` 状态
+- 手动保存：`/fusion:checkpoint`
+- 手动恢复：`/fusion:resume-context`
+
+**不需要时**：
+- 极简任务（无需跨会话持续）
+- 会话未断开（Level 1 足够）
 
 ---
 

@@ -10,10 +10,12 @@
 #   - This script copies files; it does not modify existing Trellis commands
 #
 # What it does:
-#   1. Copies 6 Fusion skills into .agents/skills/
-#   2. Copies 6 Fusion commands into .claude/commands/fusion/
-#   3. Copies workflow documentation into .trellis/
-#   4. Appends update.skip entries to .trellis/config.yaml
+#   1. Copies 7 Fusion skills into .agents/skills/
+#   2. Copies 8 Fusion commands into .claude/commands/fusion/
+#   3. Copies 2 Fusion hooks into .claude/hooks/
+#   4. Copies Fusion scripts into .trellis/scripts/fusion/
+#   5. Copies workflow documentation into .trellis/
+#   6. Appends update.skip entries to .trellis/config.yaml
 
 set -euo pipefail
 
@@ -36,7 +38,7 @@ if [ ! -d "$TARGET/.trellis" ]; then
 fi
 
 # --- Skills ---
-echo "[1/4] Copying Fusion skills..."
+echo "[1/6] Copying Fusion skills..."
 SKILLS=(
   brainstorm-plus
   write-task-plan
@@ -44,6 +46,7 @@ SKILLS=(
   harvest-learnings
   systematic-debugging
   review-with-agents
+  context-continuity
 )
 
 mkdir -p "$TARGET/.agents/skills"
@@ -57,7 +60,7 @@ for skill in "${SKILLS[@]}"; do
 done
 
 # --- Commands ---
-echo "[2/4] Copying Fusion commands..."
+echo "[2/6] Copying Fusion commands..."
 mkdir -p "$TARGET/.claude/commands/fusion"
 if [ -d "$SCRIPT_DIR/.claude/commands/fusion" ]; then
   cp "$SCRIPT_DIR/.claude/commands/fusion/"*.md "$TARGET/.claude/commands/fusion/"
@@ -66,8 +69,35 @@ else
   echo "  ! Source fusion commands directory not found"
 fi
 
+# --- Hooks ---
+echo "[3/6] Copying Fusion hooks..."
+mkdir -p "$TARGET/.claude/hooks"
+HOOKS=(
+  fusion-session-start.py
+  fusion-pre-compact.py
+)
+
+for hook in "${HOOKS[@]}"; do
+  if [ -f "$SCRIPT_DIR/.claude/hooks/$hook" ]; then
+    cp "$SCRIPT_DIR/.claude/hooks/$hook" "$TARGET/.claude/hooks/"
+    echo "  + $hook"
+  else
+    echo "  ! $hook not found in source, skipping"
+  fi
+done
+
+# --- Scripts ---
+echo "[4/6] Copying Fusion scripts..."
+if [ -d "$SCRIPT_DIR/.trellis/scripts/fusion" ]; then
+  mkdir -p "$TARGET/.trellis/scripts/fusion"
+  cp "$SCRIPT_DIR/.trellis/scripts/fusion/"*.py "$TARGET/.trellis/scripts/fusion/"
+  echo "  + $(ls "$SCRIPT_DIR/.trellis/scripts/fusion/"*.py | wc -l) script files"
+else
+  echo "  ! Source fusion scripts directory not found"
+fi
+
 # --- Documentation ---
-echo "[3/4] Copying workflow documentation..."
+echo "[5/6] Copying workflow documentation..."
 DOCS=(
   fusion-workflow.md
   fusion-workflow-quickref.md
@@ -88,7 +118,7 @@ if [ -f "$SCRIPT_DIR/FORK_CHANGELOG.md" ]; then
 fi
 
 # --- Config update ---
-echo "[4/4] Checking config.yaml for update.skip entries..."
+echo "[6/6] Checking config.yaml for update.skip entries..."
 CONFIG="$TARGET/.trellis/config.yaml"
 
 if [ -f "$CONFIG" ]; then
@@ -105,6 +135,14 @@ if [ -f "$CONFIG" ]; then
     NEEDS_UPDATE=true
   fi
 
+  if ! grep -q ".trellis/scripts/fusion/" "$CONFIG" 2>/dev/null; then
+    NEEDS_UPDATE=true
+  fi
+
+  if ! grep -q "fusion-session-start.py" "$CONFIG" 2>/dev/null; then
+    NEEDS_UPDATE=true
+  fi
+
   if [ "$NEEDS_UPDATE" = true ]; then
     echo ""
     echo "  WARNING: Your config.yaml may need update.skip entries for Fusion files."
@@ -116,6 +154,9 @@ if [ -f "$CONFIG" ]; then
     for skill in "${SKILLS[@]}"; do
       echo "      - .agents/skills/$skill/"
     done
+    echo "      - .claude/hooks/fusion-session-start.py"
+    echo "      - .claude/hooks/fusion-pre-compact.py"
+    echo "      - .trellis/scripts/fusion/"
     echo ""
     echo "  This prevents 'trellis update' from removing Fusion files."
   else
@@ -135,6 +176,8 @@ echo "  /fusion:execute-plan-tdd"
 echo "  /fusion:harvest-learnings"
 echo "  /fusion:systematic-debugging"
 echo "  /fusion:review-with-agents"
+echo "  /fusion:checkpoint"
+echo "  /fusion:resume-context"
 echo ""
 echo "Fusion skills available in Codex:"
 echo "  \$brainstorm-plus"
@@ -143,5 +186,9 @@ echo "  \$execute-plan-tdd"
 echo "  \$harvest-learnings"
 echo "  \$systematic-debugging"
 echo "  \$review-with-agents"
+echo "  \$context-continuity"
+echo ""
+echo "IMPORTANT: Register Fusion hooks in .claude/settings.json."
+echo "  See FORK_CHANGELOG.md or fusion-workflow.md for hook registration details."
 echo ""
 echo "See .trellis/fusion-workflow.md for usage guide."

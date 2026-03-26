@@ -68,20 +68,30 @@
 | Files | `.agents/skills/review-with-agents/SKILL.md`, `.claude/commands/fusion/review-with-agents.md` |
 | Upstream replacement candidate | If upstream adds subagent-based code review |
 
+### context-continuity
+
+| Field | Value |
+|-------|-------|
+| Introduced | 2026-03-26 |
+| Purpose | Task execution state persistence layer — lets agents resume to "where was I, what's blocked, what's next" after new sessions, compact, or platform switches |
+| Why not upstream | Upstream has session resume (Level 1) and cold restart from task docs (Level 3), but no semantic resume (Level 2) that preserves execution progress, decisions, and working set |
+| Files | `.agents/skills/context-continuity/SKILL.md`, `.claude/hooks/fusion-session-start.py`, `.claude/hooks/fusion-pre-compact.py`, `.trellis/scripts/fusion/recovery_io.py`, `.trellis/scripts/fusion/checkpoint.py`, `.trellis/scripts/fusion/resume.py`, `.claude/commands/fusion/checkpoint.md`, `.claude/commands/fusion/resume-context.md` |
+| Upstream replacement candidate | If upstream adds task-level execution state persistence with cross-session recovery |
+
 ---
 
 ## Structural Decisions
 
 ### Overlay installer (2026-03-26)
 
-- `install-fusion.sh` copies all 6 Fusion skills, commands, and docs into any Trellis project
+- `install-fusion.sh` copies all 7 Fusion skills, commands, and docs into any Trellis project
 - No need to fork — install into any existing `trellis init` project
 - Warns about config.yaml `update.skip` entries needed
 
 ### Namespace isolation (2026-03-26)
 
 - Custom Claude Code commands live under `.claude/commands/fusion/` (invoked as `/fusion:*`)
-- Custom skills live under `.agents/skills/<skill-name>/` with unique names (6 total)
+- Custom skills live under `.agents/skills/<skill-name>/` with unique names (7 total)
 - Native Trellis commands remain under `/trellis:*` and are not modified
 - `config.yaml` `update.skip` only targets custom paths, not entire native directories
 

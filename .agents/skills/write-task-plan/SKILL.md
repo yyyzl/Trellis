@@ -184,7 +184,18 @@ Also check for:
 - references to requirements not present in `prd.md`
 - slices that are too large or too vague
 
-### 7. Finish with execution guidance
+### 7. Checkpoint — Context Continuity
+
+After the plan is written, **save the plan structure to `.fusion/`** so it survives session boundaries:
+
+```bash
+python3 .trellis/scripts/fusion/checkpoint.py \
+  --status "plan written, ready to execute" \
+  --source "write-task-plan" \
+  --next "run execute-plan-tdd from Slice 1"
+```
+
+### 8. Finish with execution guidance
 
 End by telling the user the plan is ready and how to proceed.
 
